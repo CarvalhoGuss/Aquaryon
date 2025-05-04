@@ -1,6 +1,6 @@
-# Nome do Projeto
+# Aquaryon
 
-Pequena descrição ou slogan do projeto. O que ele faz? Por que é interessante?
+Gera um relatório dizendo quais parâmetros do seu aquario precisam ser corrigidos e como corrigir.
 
 ## Índice
 
