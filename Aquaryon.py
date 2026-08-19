@@ -1,6 +1,13 @@
 from datetime import date
 
 
+def formatar(valor, unidade=''):
+    """Mostra '-' se o valor estiver vazio, ou 'valor unidade' se houver número."""
+    if valor == '':
+        return '-'
+    return f'{valor} {unidade}'.strip()
+
+
 # Verificação se é número
 def pedir_numero(mensagem, tipo=float):
     """Pede um número ao usuário. Aceita campo em branco (retorna '')."""
@@ -9,7 +16,7 @@ def pedir_numero(mensagem, tipo=float):
         if valor == '':
             return ''  # campo em branco -> "não medido"
         try:
-            return tipo(valor.replace(',', '.'))  # aceita vírgula ou ponto
+            return tipo(valor.replace(',', '.'))
         except ValueError:
             print('Valor inválido. Digite um número (ou deixe em branco para pular).')
 
@@ -260,13 +267,13 @@ def avaliar_magnesio(magnesio):
 def resultados_dos_testes(nome_cliente, salinidade, kh, fosfato, nitrato, calcio, magnesio):
     print('\n<===== Resultados dos Testes =====>',
           '\nData: {}'.format(date.today().strftime("%d/%m/%Y")),
-          '\nCliente: {}'.format(nome_cliente),
-          '\nSalinidade: {} g/cm³'.format(salinidade),
-          '\nAlcalinidade (Kh): {} dKH'.format(kh),
-          '\nFosfato (PO4): {} ppm'.format(fosfato),
-          '\nNitrato (NO3): {} ppm'.format(nitrato),
-          '\nCálcio (Ca): {} mg/l'.format(calcio),
-          '\nMagnésio (Mg): {} mg/l'.format(magnesio),
+          '\nCliente: {}'.format(nome_cliente, 'dKH')),
+          '\nSalinidade: {}'.format(formatar(salinidade, 'g/cm³')),
+          '\nAlcalinidade (Kh): {}'.format(formatar(kh, 'dKH')),
+          '\nFosfato (PO4): {}'.format(formatar(fosfato, 'ppm')),
+          '\nNitrato (NO3): {}'.format(formatar(nitrato, 'ppm')),
+          '\nCálcio (Ca): {}'.format(formatar(calcio, 'mg/l')),
+          '\nMagnésio (Mg): {}'.format(formatar(magnesio, 'mg/l')),
           '\n'
           )
     avaliar_salinidade(salinidade)
@@ -275,7 +282,6 @@ def resultados_dos_testes(nome_cliente, salinidade, kh, fosfato, nitrato, calcio
     avaliar_nitrato(nitrato)
     avaliar_calcio(calcio)
     avaliar_magnesio(magnesio)
-
 
 # Programa principal
 nome_cliente, salinidade, kh, fosfato, nitrato, calcio, magnesio = menu()
