@@ -54,7 +54,7 @@ def tabela_de_referencia():
 
 
 # Parâmetros e procedimentos
-def avaliar_salinidade(salinidade):
+def avaliar_salinidade(salinidade, exibir=True):
     if salinidade != '':
         if salinidade <= 1021:
             cor = 'red'
@@ -103,16 +103,17 @@ def avaliar_salinidade(salinidade):
                         'uma TPA. Obs.: verifique regularmente se o seu medidor de salinidade está devidamente '
                         'calibrado.')
 
-        print(f'[{cor}]{mensagem}[/{cor}]')
-        print()
+        if exibir:
+            print(f'[{cor}]{mensagem}[/{cor}]')
+            print()
     else:
-        salinidade = "Não medido"
+        cor = None
 
-    return salinidade
+    return salinidade, cor
 
 
-def avaliar_kh(kh):
-    if kh != '':  # Condicional de ocorrencia.
+def avaliar_kh(kh, exibir=True):
+    if kh != '':
         if kh <= 5.5:  # muito baixo
             cor = 'red'
             mensagem = ('Nível de Kh muito baixo. Para corrigir recomendamos suplementar Kh através de algum '
@@ -146,15 +147,16 @@ def avaliar_kh(kh):
                         'suspender a dosagem do balling de Kh até os parâmetros se adequarem. Fazer uma TPA '
                         '(troca parcial de água) pode ajudar a reduzir os níveis.')
 
-        print(f'[{cor}]{mensagem}[/{cor}]')
-        print()
+        if exibir:
+            print(f'[{cor}]{mensagem}[/{cor}]')
+            print()
     else:
-        kh = 'Não medido'
+        cor = None
 
-    return kh
+    return kh, cor
 
 
-def avaliar_fosfato(fosfato):
+def avaliar_fosfato(fosfato, exibir=True):
     if fosfato != '':
         if fosfato == 0.00:  # Fosfato zerado
             cor = 'yellow'
@@ -194,13 +196,18 @@ def avaliar_fosfato(fosfato):
                         'redução. Tome cuidado para não alimentar excessivamente os animais. Restos de ração no '
                         'aquario fazem aumentar o nível de fosfáto.')
 
-        print(f'[{cor}]{mensagem}[/{cor}]')
-    print()
+        if exibir:
+            print(f'[{cor}]{mensagem}[/{cor}]')
+    else:
+        cor = None
 
-    return fosfato
+    if exibir:
+        print()
+
+    return fosfato, cor
 
 
-def avaliar_nitrato(nitrato):
+def avaliar_nitrato(nitrato, exibir=True):
     if nitrato != '':
         if nitrato == 0.00:  # Zerado (muito baixo)
             cor = 'yellow'
@@ -237,13 +244,18 @@ def avaliar_nitrato(nitrato):
                         'recomendamos verificar se o Skimmer está devidamente regulado, e utilizar uma fonte de '
                         'carbono. Uma TPA (troca parcial de água) pode ajudar nesse processo.')
 
-        print(f'[{cor}]{mensagem}[/{cor}]')
-    print()
+        if exibir:
+            print(f'[{cor}]{mensagem}[/{cor}]')
+    else:
+        cor = None
 
-    return nitrato
+    if exibir:
+        print()
+
+    return nitrato, cor
 
 
-def avaliar_calcio(calcio):
+def avaliar_calcio(calcio, exibir=True):
     if calcio != '':
         if calcio <= 310:  # Muito baixo
             cor = 'red'
@@ -274,13 +286,18 @@ def avaliar_calcio(calcio):
             mensagem = ('Nível de cálcio estourou o teste. Para corrigir, recomendamos suspender '
                         'momentâneamente a dosagem de balling até a normalização.')
 
-        print(f'[{cor}]{mensagem}[/{cor}]')
-    print()
+        if exibir:
+            print(f'[{cor}]{mensagem}[/{cor}]')
+    else:
+        cor = None
 
-    return calcio
+    if exibir:
+        print()
+
+    return calcio, cor
 
 
-def avaliar_magnesio(magnesio):
+def avaliar_magnesio(magnesio, exibir=True):
     if magnesio != '':
         if magnesio <= 1200:  # muito baixo
             cor = 'red'
@@ -307,25 +324,40 @@ def avaliar_magnesio(magnesio):
             mensagem = ('Nível de magnésio muito alto. Para corrigir, recomendamos fazer uma TPA (troca parcial '
                         'de água) ou suspender momentaneamente o uso do balling até normalizarem os parâmetros.')
 
-        print(f'[{cor}]{mensagem}[/{cor}]')
-    print()
+        if exibir:
+            print(f'[{cor}]{mensagem}[/{cor}]')
+    else:
+        cor = None
 
-    return magnesio
+    if exibir:
+        print()
+
+    return magnesio, cor
 
 
 # Tabela de laudo
 def resultados_dos_testes(nome_cliente, salinidade, kh, fosfato, nitrato, calcio, magnesio):
+    # Calcula as cores
+    _, cor_salinidade = avaliar_salinidade(salinidade, exibir=False)
+    _, cor_kh = avaliar_kh(kh, exibir=False)
+    _, cor_fosfato = avaliar_fosfato(fosfato, exibir=False)
+    _, cor_nitrato = avaliar_nitrato(nitrato, exibir=False)
+    _, cor_calcio = avaliar_calcio(calcio, exibir=False)
+    _, cor_magnesio = avaliar_magnesio(magnesio, exibir=False)
+
+    # Imprime a tabela já com os números coloridos
     print('\n<===== Resultados dos Testes =====>',
           '\nData: {}'.format(date.today().strftime("%d/%m/%Y")),
           '\nCliente: {}'.format(nome_cliente),
-          '\nSalinidade: {}'.format(formatar(salinidade, 'g/cm³')),
-          '\nAlcalinidade (Kh): {}'.format(formatar(kh, 'dKH')),
-          '\nFosfato (PO4): {}'.format(formatar(fosfato, 'ppm')),
-          '\nNitrato (NO3): {}'.format(formatar(nitrato, 'ppm')),
-          '\nCálcio (Ca): {}'.format(formatar(calcio, 'mg/l')),
-          '\nMagnésio (Mg): {}'.format(formatar(magnesio, 'mg/l')),
+          '\nSalinidade: {}'.format(formatar(salinidade, 'g/cm³', cor_salinidade)),
+          '\nAlcalinidade (Kh): {}'.format(formatar(kh, 'dKH', cor_kh)),
+          '\nFosfato (PO4): {}'.format(formatar(fosfato, 'ppm', cor_fosfato)),
+          '\nNitrato (NO3): {}'.format(formatar(nitrato, 'ppm', cor_nitrato)),
+          '\nCálcio (Ca): {}'.format(formatar(calcio, 'mg/l', cor_calcio)),
+          '\nMagnésio (Mg): {}'.format(formatar(magnesio, 'mg/l', cor_magnesio)),
           '\n'
           )
+
     avaliar_salinidade(salinidade)
     avaliar_kh(kh)
     avaliar_fosfato(fosfato)
